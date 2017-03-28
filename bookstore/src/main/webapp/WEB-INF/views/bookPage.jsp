@@ -56,7 +56,7 @@
         </div>
     </div>
 </div>
-<table class="table">
+<table class="table" id="bookTable">
     <thead>
     <tr>
         <th>bookid</th>
@@ -70,15 +70,40 @@
     <tbody>
     <c:forEach var="i" items="${books}">
         <tr>
-            <td>${i.id }</td>
-            <td>${i.name }</td>
-            <td>${i.author }</td>
-            <td>${i.stock }</td>
-            <td>${i.price }</td>
-            <td>${i.type }</td>
+            <td>${i.id }1</td>
+            <td>${i.name }1</td>
+            <td>${i.author }1</td>
+            <td>${i.stock }1</td>
+            <td>${i.price }1</td>
+            <td>${i.type }1</td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
+<button type="button" onclick="loadDoc()">Next Page</button>
+<script>
+    var count=0;
+    function loadDoc() {
+        count=count+1;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var myobj = JSON.parse(xhttp.responseText);
+                console.log(myobj);
+                var table=document.getElementById("bookTable");
+                for(var i=1;i<3;i++){
+                    table.rows[i].cells[0].innerHTML=myobj[i-1].id;
+                    table.rows[i].cells[1].innerHTML=myobj[i-1].name;
+                    table.rows[i].cells[2].innerHTML=myobj[i-1].author;
+                    table.rows[i].cells[3].innerHTML=myobj[i-1].stock;
+                    table.rows[i].cells[4].innerHTML=myobj[i-1].price;
+                    table.rows[i].cells[5].innerHTML=myobj[i-1].type;
+                }
+            }
+        };
+        xhttp.open("GET", "book/ajax/"+count, true);
+        xhttp.send();
+    }
+</script>
 </body>
 </html>

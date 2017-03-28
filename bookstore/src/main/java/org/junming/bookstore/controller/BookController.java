@@ -13,8 +13,10 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +48,16 @@ public class BookController {
         List<Book> booklist= bookService.getFilterBooks(auths);
         map.put("books",  booklist);
         return new ModelAndView("bookPage",map);
+    }
+
+    @RequestMapping(value = "/ajax/{count}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<Book> bookAjax(@PathVariable("count") int count) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> auths= new ArrayList<GrantedAuthority>(auth.getAuthorities());
+        List<Book> booklist= bookService.getFilterBooks(auths);
+        System.out.println("count:"+count);
+        return booklist;
     }
 
     @RequestMapping(value="/cart/viewcart",method = RequestMethod.GET)
