@@ -1,9 +1,10 @@
 package org.junming.bookstore.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Book {
+public class Book implements Serializable {
     private String id;
     private String name;
     private String author;
