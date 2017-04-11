@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.junming.bookstore.dao.BookDAO">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+    <resultMap type="org.junming.bookstore.model.Book" id="bookMap">
+        <id column="b_id" property="id"/>
+        <result column="b_name" property="name"/>
+        <result column="author" property="author"/>
+        <result column="stock" property="stock"/>
+        <result column="price" property="price"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <select id="getBookById" parameterType="String" resultType="org.junming.bookstore.model.Book">
+        SELECT DISTINCT
+        b_id as id, b_name as name, author,stock, price, 'type'
+        FROM books
+        where b_id = #{id};
+    </select>
+
+    <select id="getBooks" resultMap="bookMap">
+        SELECT *
+        FROM books
+    </select>
+
+    <select id="getBookByOrderId" parameterType="int" resultMap="bookMap">
+        SELECT *
+        FROM books
+        WHERE b_id IN
+        (SELECT b_id
+        FROM
+        order_book
+        WHERE o_id = #{oid})
+    </select>
+
+    <insert id="insertBook" parameterType="org.junming.bookstore.model.Book">
+         INSERT INTO books (b_id,b_name,author,stock,price,type)
+        VALUES (#{book.id},#{book.name},#{book.author},#{book.stock},#{book.price},#{book.type})
+
+    </insert>
+
+    <update id="sellBookById" parameterType="String">
+        UPDATE books
+        SET stock=stock-1
+        WHERE b_id=#{id}
+    </update>
+
+
+    <!--    <update id="reduceNumber">
+            UPDATE book
+            SET number = number - 1
+            WHEREi
+            book_id = #{bookId}
+            AND number > 0
+        </update>-->
+</mapper>

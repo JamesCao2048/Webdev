@@ -1,0 +1,7 @@
+﻿1 Render View with authority, 非登录用户不能查看Order按钮，非管理员用户不能查看Adm按钮
+2 将permission文件移动到resources目录下
+3 try catch exception为何最后还需返回值
+4 用文件配置角色
+5 BookPermissionDAO逻辑分层
+6 BookServiceImp filterbook 迭代为何一个迭代两步
+7 http重定向到http时改变url与方法

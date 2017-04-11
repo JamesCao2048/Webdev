@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.junming.bookstore.dao.UserDAO">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+    <resultMap type="org.junming.bookstore.model.User" id="userMap">
+        <id column="u_id" property="id"/>
+        <result column="pw" property="password"/>
+        <result column="u_name" property="name"/>
+        <result column="e_mail" property="email"/>
+        <result column="gender" property="gender"/>
+        <result column="age" property="age"/>
+    </resultMap>
+
+    <select id="getUserById" parameterType="String" resultType="org.junming.bookstore.model.User">
+    SELECT DISTINCT
+    u_id as id, pw as password, u_name as name, gender,e_mail as email, age
+    FROM
+    users
+    where u_id = #{id};
+</select>
+
+    <select id="getAdmById" parameterType="String" resultType="org.junming.bookstore.model.Adm">
+        SELECT DISTINCT
+        u_id as id, pw as password, u_name as name, gender,e_mail as email, age
+        FROM
+        users
+        where u_id = (SELECT a_id FROM adms where a_id = #{id});
+    </select>
+
+
+    <insert id="insertUser" parameterType="org.junming.bookstore.model.User" >
+        INSERT INTO users (u_id, pw,u_name,gender,e_mail,age)
+        VALUES (#{user.id},#{user.password},#{user.name},#{user.gender},#{user.email},#{user.age})
+
+    </insert>
+    
+    <select id="getUsers" resultMap="userMap">
+        SELECT *
+        FROM
+        users
+    </select>
+
+<!--    <update id="reduceNumber">
+        UPDATE book
+        SET number = number - 1
+        WHEREi
+        book_id = #{bookId}
+        AND number > 0
+    </update>-->
+</mapper>
