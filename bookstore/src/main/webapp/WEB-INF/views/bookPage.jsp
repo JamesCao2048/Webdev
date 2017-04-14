@@ -15,7 +15,7 @@
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-    <s:url value="/resources/my.css" var="myCss" />
+    <s:url value="/WEB_INF/resources/my.css" var="myCss" />
     <link href="${myCss}" rel="stylesheet" />
 </head>
 <body>
@@ -30,9 +30,6 @@
 </header>
 <h1>Book Page</h1>
 <h3>Book Info</h3>
-<div class="btn-group-vertical" role="group" aria-label="...">
-    <button type="button" class="btn btn-default op" data-toggle="modal" data-target="#addBook">Add Book</button>
-</div>
 <div class="modal fade" id="addBook"  role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -56,52 +53,59 @@
         </div>
     </div>
 </div>
-<table class="table" id="bookTable">
+<div style="display:block">
+<table class="table col-md-3 col-lg-3" style="display: inline-block; width:30%;" id="bookTable">
     <thead>
     <tr>
         <th>bookid</th>
         <th>bookname</th>
         <th>author</th>
-        <th>stock</th>
-        <th>price</th>
-        <th>type</th>
     </tr>
     </thead>
     <tbody>
     <c:forEach var="i" items="${books}">
         <tr>
-            <td>${i.id }1</td>
-            <td>${i.name }1</td>
-            <td>${i.author }1</td>
-            <td>${i.stock }1</td>
-            <td>${i.price }1</td>
-            <td>${i.type }1</td>
+            <td>${i.id }</td>
+            <td>${i.name }</td>
+            <td>${i.author }</td>
+            <td><button type="button"  onclick="loadBook('${i.id}')">Detail</button></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-<button type="button" onclick="loadDoc()">Next Page</button>
+
+<div style="display: none" id="curBook" class="col-md-3 col-lg-3">
+<h3>Current Book</h3>
+<p>Id: <span id="selId"></span></p>
+<p>Name: <span id="selName"></span></p>
+<p>Author: <span id="selAuthor"></span></p>
+<p>Stock: <span id="selStock"></span></p>
+<p>Price: <span id="selPrice"></span></p>
+<p>Type: <span id="selType"></span></p>
+</div>
+</div>
+<div class="btn-group-vertical" role="group" aria-label="..." style="display: block;width: 10%">
+    <button type="button" class="btn btn-default op" data-toggle="modal" data-target="#addBook">Add Book</button>
+</div>
 <script>
-    var count=0;
-    function loadDoc() {
-        count=count+1;
+    function loadBook(id) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
+                console.log(id);
+                console.log(xhttp.responseText);
                 var myobj = JSON.parse(xhttp.responseText);
                 console.log(myobj);
-                var table=document.getElementById("bookTable");
-                for(var i=1;i<3;i++){
-                    table.rows[i].cells[0].innerHTML=myobj[i-1].id;
-                    table.rows[i].cells[1].innerHTML=myobj[i-1].name;
-                    table.rows[i].cells[2].innerHTML=myobj[i-1].author;
-                    table.rows[i].cells[3].innerHTML=myobj[i-1].stock;
-                    table.rows[i].cells[4].innerHTML=myobj[i-1].price;
-                    table.rows[i].cells[5].innerHTML=myobj[i-1].type;
-                }
+                document.getElementById("selId").innerHTML=myobj.id;
+                document.getElementById("selName").innerHTML=myobj.name;
+                document.getElementById("selAuthor").innerHTML=myobj.author;
+                document.getElementById("selStock").innerHTML=myobj.stock;
+                document.getElementById("selPrice").innerHTML=myobj.price;
+                document.getElementById("selType").innerHTML=myobj.type;
+                document.getElementById("curBook").style.display="block";
             }
         };
-        xhttp.open("GET", "book/ajax/"+count, true);
+        xhttp.open("GET", "book/ajax/"+id, true);
         xhttp.send();
     }
 </script>

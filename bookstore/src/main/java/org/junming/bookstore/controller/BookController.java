@@ -50,14 +50,10 @@ public class BookController {
         return new ModelAndView("bookPage",map);
     }
 
-    @RequestMapping(value = "/ajax/{count}", method = RequestMethod.GET)
+    @RequestMapping(value = "/ajax/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    List<Book> bookAjax(@PathVariable("count") int count) throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> auths= new ArrayList<GrantedAuthority>(auth.getAuthorities());
-        List<Book> booklist= bookService.getFilterBooks(auths);
-        System.out.println("count:"+count);
-        return booklist;
+    Book bookAjax(@PathVariable("id") String id) throws Exception {
+        return bookService.getBookById(id);
     }
 
     @RequestMapping(value="/cart/viewcart",method = RequestMethod.GET)

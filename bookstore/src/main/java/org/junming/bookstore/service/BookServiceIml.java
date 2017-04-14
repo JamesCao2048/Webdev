@@ -21,15 +21,19 @@ import java.util.List;
 @Service
 @Transactional
 public class BookServiceIml implements BookService {
-    private static Logger logger = LoggerFactory.getLogger(UserServiceIml.class);
+
     @Autowired
     private BookDAO bookDAO;
 
     @Autowired
     private BookPermissionDAO bookPermissionDAO;
 
+    @Autowired
+    private LogService logService;
+
     @Override
     public Book getBookById(String id) {
+        logService.logInfo(UserServiceIml.class,"get book by id:"+id);
         return bookDAO.getBookById(id);
     }
 
@@ -51,19 +55,6 @@ public class BookServiceIml implements BookService {
     @Override
     public List<Book> getFilterBooks(List<GrantedAuthority> grantedAuthorities) throws Exception {
         List<Book> books = bookDAO.getBooks();
-        /*
-        if(grantedAuthorities.contains(new SimpleGrantedAuthority("ROLE_ADM")))
-        {
-                return books;
-        }
-        else{
-            for(Iterator<Book> i=books.iterator();i.hasNext();){
-                if(i.next().getType().equals("science fiction"))
-                    i.remove();
-            }
-            return books;
-        }
-    }*/
         List<String> roles = new ArrayList<String>();
         if (grantedAuthorities!=null &&
                 grantedAuthorities.contains(new SimpleGrantedAuthority("ROLE_ADM"))) {
@@ -73,14 +64,6 @@ public class BookServiceIml implements BookService {
         List<String> permission = bookPermissionDAO.getPermissionByRoleList(roles);
 
         List<Book> remove=new ArrayList<>();
-                /*
-        for (Iterator<Book> i = books.iterator(); i.hasNext(); ) {
-                    Book book =i.next();
-                    String re=book.getType().toUpperCase();
-                    boolean flag= permission.contains(re);
-                    if(!flag)
-                        i.remove();
-        }*/
         for(Book b : books)
         {
             String re=b.getType().toUpperCase();

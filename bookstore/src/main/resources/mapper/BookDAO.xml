@@ -16,7 +16,7 @@
 
     <select id="getBookById" parameterType="String" resultType="org.junming.bookstore.model.Book">
         SELECT DISTINCT
-        b_id as id, b_name as name, author,stock, price, 'type'
+        b_id as id, b_name as name, author,stock, price, type
         FROM books
         where b_id = #{id};
     </select>

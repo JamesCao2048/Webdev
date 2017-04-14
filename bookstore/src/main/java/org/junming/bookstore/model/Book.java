@@ -79,16 +79,6 @@ public class Book implements Serializable {
         this.price = price;
     }
 
-    /*private Set orders = new HashSet();
-
-    public Set getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set orders) {
-        this.orders = orders;
-    }*/
-
     public String toString()
     {
         return "id " + getId()+" Name:  " + getName() +
